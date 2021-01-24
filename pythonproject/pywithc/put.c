@@ -2,8 +2,16 @@
 int putInt(int *p, int value){
 	*p = value;
 	printf("地址：%p的值,", p);
-	printf("设置为%d\n",value);
-	return value;
+	printf("设置为%d\n",*p);
+	return *p;
+}
+int putAddr(long addr, int value){
+    int *p;
+    p = (int *)(intptr_t)addr;
+    *p = value;
+    printf("地址：%p的值,", p);
+	printf("设置为%d\n",*p);
+    return *p;
 }
 int useregister(int value){
 	int register val = value;
