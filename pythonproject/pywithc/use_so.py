@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ctypes import *
 # gcc -shared -Wl,-install_name,adder.so -o put.so -fPIC put.c
 lib = CDLL("put.so")
@@ -11,6 +12,7 @@ print(d.value)
 print(i)
 
 
+
 i = 10
 ad = id(i)
 print(hex(ad))
@@ -20,3 +22,4 @@ print(res)
 suc = cast(ad, POINTER(c_int)).contents.value
 print(suc)
 print(i)
+print(hex(id(i)))
