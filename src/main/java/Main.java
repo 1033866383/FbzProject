@@ -1,7 +1,9 @@
 import java.util.*;
 
 public class Main {
+    Main c = new Main();
     public static void main(String[] args) {
+        var c = new Main();
         System.out.println(System.getenv());
         int [] arr = new int[]{3,2,1,3,4,6,8,-1,-23};
         Main main = new Main();
