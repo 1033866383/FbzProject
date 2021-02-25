@@ -1,3 +1,4 @@
+//gcc -shared -Wl,-install_name,adder.so -o put.so -fPIC put.c
 #include <stdio.h>
 int putInt(int *p, int value){
 	*p = value;
@@ -12,6 +13,11 @@ int putAddr(long addr, int value){
     printf("地址：%p的值,", p);
 	printf("设置为%d\n",*p);
     return *p;
+}
+int* change(int value){
+    int *p;
+    p = &value;
+    return p;
 }
 int useregister(int value){
 	int register val = value;
