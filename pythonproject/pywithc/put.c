@@ -23,6 +23,12 @@ int useregister(int value){
 	int register val = value;
 	return val;
 }
+void chengarr(int * a){
+    int arr[10];
+    a[0]=-123;
+    printf("%d",a[0]);
+    printf("success\n");
+}
 int main(int argc, char const *argv[])
 {
 	int tmp = 0;
