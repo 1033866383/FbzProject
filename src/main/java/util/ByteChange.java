@@ -1,9 +1,6 @@
 package util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public strictfp class ByteChange {
     private byte [] bytes = null;
@@ -39,14 +36,7 @@ public strictfp class ByteChange {
             this.bytes[++index] = (byte)tmp;
         }
     }
-    public static void main(String [] args) throws IOException {
-        File f = new File("C:\\Users\\Administrator\\Desktop\\PythonStudy.py");
-        InputStream in = new FileInputStream(f);
-        int tmp = 0;
-        ByteChange bt = new ByteChange();
-        while((tmp = in.read()) != -1){
-            bt.put(tmp);
-        }
-        System.out.println(new String(bt.getByte()));
+    public static void main(String [] args)  {
+
     }
 }
