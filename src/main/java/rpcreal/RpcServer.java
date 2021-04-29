@@ -5,9 +5,16 @@ import annotion.FRpc;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @FRpc
 public class RpcServer {
@@ -16,24 +23,45 @@ public class RpcServer {
         ServerSocket server = null;
         try {
             server = new ServerSocket(port);
+            Map<String, Object> services = getService(clazz);
+            Executor executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+            while (true){
+                Socket client = server.accept();
+                RpcService service = new RpcService(client, services);
+                executor.execute(service);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-//    public Map<String, Object> getService(String clazz){
-//        Map<String, Object> services = new HashMap<>();
-//        String [] clazzes = clazz.split(",");
-//        List<Class<?>> classes = new ArrayList<>();
-//        for(String cl : clazzes){
-//            List<Class<?>> classList = getClasses(cl);
-//        }
-//    }
+    public Map<String, Object> getService(String clazz){
+        try {
+            Map<String, Object> services = new HashMap<>();
+            String [] clazzes = clazz.split(",");
+            List<Class<?>> classes = new ArrayList<>();
+            for(String cl : clazzes){
+                List<Class<?>> classList = getClasses(cl);
+                classes.addAll(classList);
+            }
+            for(Class<?> cla : classes){
+                Object obj = cla.getConstructor().newInstance();
+                services.put(cla.getAnnotation(FRpc.class).value().getName(), obj);
+            }
+            return services;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    //https://blog.csdn.net/beyond_qjm/article/details/79083126
 
     public static void main(String[] args) throws ClassNotFoundException {
         List ls = getClasses("rpcreal");
+        List lss = getClasses("lambdatest");
         System.out.println(ls);
+        System.out.println(lss);
     }
+
 
     //扫描注解
     public static List<Class<?>> getClasses(String pckgname) throws ClassNotFoundException {
@@ -52,20 +80,17 @@ public class RpcServer {
                 throw new ClassNotFoundException(pckgname + " (" + directory + ") does not appear to be a valid package a");
         }
         if(directory.exists()){
-            String [] files = directory.list();
             File[] fileList =  directory.listFiles();
-            for(int i = 0; fileList != null && i < fileList.length; i++){
-                File file = fileList[i];
+            for(File file : fileList){
                 if(file.isFile() && file.getName().endsWith(".class")){
-                    Class<?> clazz = Class.forName(pckgname + '.' + files[i].substring(0, files[i].length() - 6));
+                    Class<?> clazz = Class.forName(pckgname + '.' + file.getName().substring(0, file.getName().length() - 6));
                     if(clazz.getAnnotation(annotion.FRpc.class) != null){
                         classes.add(clazz);
                     }
                 }else if(file.isDirectory()){
                     List<Class<?>> result = getClasses(pckgname + '.' + file.getName());
-                    if(result != null && result.size() != 0){
+                    if(result != null && result.size() != 0)
                         classes.addAll(result);
-                    }
                 }
             }
         }else{
