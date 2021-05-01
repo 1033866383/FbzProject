@@ -1,5 +1,6 @@
 package sortAll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Definition for Employee.
@@ -39,5 +40,21 @@ public class StaffImport{
                 return x.importance;
         }
         return 0;
+    }
+
+    public static void main(String[] args) {
+        StaffImport staffImport = new StaffImport();
+        Employee employee = new Employee();
+        Employee employee1 = new Employee();
+        List<Integer> sub = List.of(2);
+        employee.id = 1;
+        employee.importance = 50;
+        employee.subordinates = sub;
+        employee1.id = 2;
+        employee1.importance = 10;
+        employee1.subordinates = new ArrayList<>();
+        List<Employee> employees = List.of(employee1,employee);
+        int res = staffImport.getImportance(employees, 1);
+        System.out.println(res);
     }
 }
