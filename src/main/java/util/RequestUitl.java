@@ -1,14 +1,11 @@
 package util;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 
 public class RequestUitl {
@@ -19,10 +16,13 @@ public class RequestUitl {
         Map<String, List<String>> resHeaders;
         String res;
         int code;
-        Response(int code, String res, Map<String, List<String>> resHeaders){
+        private Response(int code, String res, Map<String, List<String>> resHeaders){
             this.code = code;
             this.res = res;
             this.resHeaders = resHeaders;
+        }
+        public String getCookie(){
+            return this.resHeaders.get("Set-Cookie").toString().replace("[", "").replace("]", "");
         }
 
         @Override
@@ -78,8 +78,7 @@ public class RequestUitl {
         outStream.write(sb.toString().getBytes());
         InputStream in = null;
         // 发送文件数据
-        if (files != null)
-        {
+        if (files != null){
             for (Map.Entry<String, File> file : files.entrySet())
             {
                 StringBuilder sb1 = new StringBuilder();
@@ -95,8 +94,7 @@ public class RequestUitl {
                 InputStream is = new FileInputStream(file.getValue());
                 byte[] buffer = new byte[1024];
                 int len = 0;
-                while ((len = is.read(buffer)) != -1)
-                {
+                while ((len = is.read(buffer)) != -1){
                     outStream.write(buffer, 0, len);
                 }
 
@@ -110,15 +108,14 @@ public class RequestUitl {
             outStream.flush();
             // 得到响应码
             int res = conn.getResponseCode();
-            if (res == 200)
-            {
+            if (res == 200){
                 in = conn.getInputStream();
                 int ch;
                 StringBuilder sb2 = new StringBuilder();
-                while ((ch = in.read()) != -1)
-                {
+                while ((ch = in.read()) != -1){
                     sb2.append((char) ch);
                 }
+                System.out.println(sb2);
             }
             outStream.close();
             conn.disconnect();
@@ -217,33 +214,50 @@ public class RequestUitl {
             }
         }
         if(params != null){
-            outputStream = httpURLConnection.getOutputStream();
-            if(isJson)
-                outputStream.write(new JSONObject(params).toString().getBytes());
-            else{
-                StringBuilder stringBuilder = new StringBuilder();
+            if(TYPE.GET.name().equals(type)){
+                url += "?";
                 for(Map.Entry<String, Object> e : params.entrySet()){
-                    stringBuilder.append(e.getKey()+"="+e.getValue()).append("&");
+                    url = url + e.getKey() + "=" + e.getValue() + "&";
                 }
-                String param = stringBuilder.substring(0, stringBuilder.length() - 1);
-                System.out.println("参数：" + param);
-                outputStream.write(param.getBytes());
+                url = url.substring(0, url.length() - 1);
+                httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
+                System.out.println(httpURLConnection.getURL());
+                if(headers != null){
+                    for(Map.Entry<String, String> entry : headers.entrySet()){
+                        httpURLConnection.setRequestProperty(entry.getKey(), entry.getValue());
+                    }
+                }
+            }else {
+                outputStream = httpURLConnection.getOutputStream();
+                if (isJson)
+                    outputStream.write(new JSONObject(params).toString().getBytes());
+                else {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (Map.Entry<String, Object> e : params.entrySet()) {
+                        stringBuilder.append(e.getKey() + "=" + e.getValue()).append("&");
+                    }
+                    String param = stringBuilder.substring(0, stringBuilder.length() - 1);
+                    System.out.println("参数：" + param);
+                    outputStream.write(param.getBytes());
+                }
             }
-            outputStream.close();
+            if(outputStream != null){
+                outputStream.close();
+            }
         }
         int tmp = 0;
         inputStream = httpURLConnection.getInputStream();
         ByteChange byteChange = new ByteChange();
-        while ((tmp = inputStream.read()) != -1){
+        while ((tmp = inputStream.read()) != -1)
             byteChange.put(tmp);
-        }
         Map<String, List<String>> setHeaders = httpURLConnection.getHeaderFields();
         inputStream.close();
-        return new Response(httpURLConnection.getResponseCode(), new String(byteChange.getByte(), "GBK"), setHeaders);
+        return new Response(httpURLConnection.getResponseCode(), new String(byteChange.getByte(), "UTF-8"), setHeaders);
     }
 
 
 
     public static void main(String[] args) {
+
     }
 }

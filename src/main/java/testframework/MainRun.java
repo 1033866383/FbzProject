@@ -64,7 +64,7 @@ public class MainRun {
     }
 
     public void runAll(){
-        String classpath = this.getClass().getResource("/").getPath();
+        var classpath = this.getClass().getResource("/").getPath();
         getTestMethod(classpath);
     }
 
