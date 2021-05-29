@@ -243,12 +243,13 @@ public class RequestUitl {
         }
         int tmp = 0;
         inputStream = httpURLConnection.getInputStream();
-        ByteChange byteChange = new ByteChange();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        DataOutputStream byteChange = new DataOutputStream(out);
         while ((tmp = inputStream.read()) != -1)
-            byteChange.put(tmp);
+            byteChange.write(tmp);
         Map<String, List<String>> setHeaders = httpURLConnection.getHeaderFields();
         inputStream.close();
-        return new Response(httpURLConnection.getResponseCode(), new String(byteChange.getByte()), setHeaders);
+        return new Response(httpURLConnection.getResponseCode(), new String(out.toByteArray(), "UTF-8"), setHeaders);
     }
 
 
