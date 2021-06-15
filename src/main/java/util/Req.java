@@ -275,9 +275,23 @@ public class Req {
         return null;
     }
 
-    public static Response postJson(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response postJson(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.POST.name(), true);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
