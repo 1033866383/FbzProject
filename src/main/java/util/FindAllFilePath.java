@@ -8,7 +8,7 @@ public class FindAllFilePath {
 
     public static List<String> findFileAbstractURl(){
         List<String> packageList = new ArrayList<>();
-        File file = new File(System.getProperty("user.dir") + "/src/main/java");
+        File file = new File(System.getProperty("user.dir") + "/target");
         getFile(file, packageList);
         return packageList;
     }
@@ -27,13 +27,18 @@ public class FindAllFilePath {
     }
 
     private static String getPackageWithFileName(File file){
+        if( !file.getName().endsWith("class") && !file.getName().endsWith("java")){
+            return null;
+        }
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String head = null;
             while ((head = bufferedReader.readLine()) != null){
-                if(head.contains("package")){
-                    String res = head.replace("package", "").replace(" ", "").replace(";", "") + "." +file.getName().substring(0, file.getName().length() - 5);
+                if(head.contains("package ")){
+                    String res = head.replace("package", "").replace(" ", "").replace(";", "") + "." +file.getName().substring(0, file.getName().length() - 6);
                     return res;
+                }else{
+                   return file.getName().substring(0, file.getName().length() - 5);
                 }
             }
         } catch (FileNotFoundException e) {

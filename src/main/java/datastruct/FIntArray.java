@@ -55,7 +55,7 @@ public class FIntArray{
         theunsafe.freeMemory(headaddress);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         FIntArray fIntArray = new FIntArray(10);
         System.out.println(fIntArray);
         for(int i = 0; i < 10; i++ ){
@@ -63,5 +63,7 @@ public class FIntArray{
         }
         System.out.println(fIntArray);
         fIntArray.theunsafe.freeMemory(fIntArray.headaddress);
+        Thread.sleep(1000);
+        System.out.println(fIntArray);
     }
 }

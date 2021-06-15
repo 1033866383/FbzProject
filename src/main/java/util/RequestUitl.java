@@ -1,13 +1,13 @@
 package util;
 
 import com.alibaba.fastjson.JSONObject;
+
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
 import java.util.List;
 import java.util.Map;
 
-public class RequestUitl {
+public class RequestUitl implements J {
     enum TYPE{
         GET, POST, PUT, DELETE
     }
@@ -41,7 +41,6 @@ public class RequestUitl {
      */
     public static void postFile(String actionUrl, Map<String, Object> params, Map<String, File> files) throws IOException
     {
-
         String BOUNDARY = java.util.UUID.randomUUID().toString();
         String PREFIX = "--", LINEND = "\r\n";
         String MULTIPART_FROM_DATA = "multipart/form-data";
@@ -252,9 +251,8 @@ public class RequestUitl {
         return new Response(httpURLConnection.getResponseCode(), new String(out.toByteArray(), "UTF-8"), setHeaders);
     }
 
-
-
     public static void main(String[] args) {
-
+        String response =  RequestUitl.postJson("https://api-test-e.suanshubang.cc/shizi-activity/api/activity/initiator/create?appId=0&cuid=lsdkf&ZYBUSS=R2Efj7FdSe7YV7lEd_nra2QQBcsGprCgdRAIXcRLhQYro8Rfz8eFPmMWGe1Et5QG", null, J.in("{\"activityId\":66,\"fromLocation\":2}")).toString();
+        System.out.println(response);
     }
 }

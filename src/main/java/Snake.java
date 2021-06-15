@@ -1,3 +1,5 @@
+import annotion.FT;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -12,6 +14,7 @@ public class Snake {
     private enum Goto{
         left,right,top,bottom
     }
+
     //食物
     private int [] foot = null;
     //y,x，
@@ -202,6 +205,7 @@ class Body {
     private int x = 0;
     private int y = 0;
 
+    @FT
     public int[] getWz(){
         return new int[]{this.x, this.y};
     }

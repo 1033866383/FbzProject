@@ -31,4 +31,8 @@ public class JPoint {
         }
     }
 
+    public static void main(String[] args) {
+        System.err.println(JPoint.getJPoint());
+    }
+
 }

@@ -109,7 +109,7 @@ public class MainRun {
           });
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         var mainRun = new MainRun();
         mainRun.runAll();
     }
