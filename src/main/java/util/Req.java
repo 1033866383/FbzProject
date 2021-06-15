@@ -3,11 +3,13 @@ package util;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RequestUitl implements J {
+public class Req {
     enum TYPE{
         GET, POST, PUT, DELETE
     }
@@ -41,6 +43,7 @@ public class RequestUitl implements J {
      */
     public static void postFile(String actionUrl, Map<String, Object> params, Map<String, File> files) throws IOException
     {
+
         String BOUNDARY = java.util.UUID.randomUUID().toString();
         String PREFIX = "--", LINEND = "\r\n";
         String MULTIPART_FROM_DATA = "multipart/form-data";
@@ -117,8 +120,22 @@ public class RequestUitl implements J {
         }
     }
 
-    public static Response deleteForm(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response deleteForm(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(header.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
+
             return sendData(url, headers, params, TYPE.DELETE.name(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,8 +143,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response putForm(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response putForm(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.PUT.name(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,8 +165,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response getForm(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response getForm(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.GET.name(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,8 +187,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response postForm(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response postForm(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.POST.name(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -153,8 +209,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response deleteJson(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response deleteJson(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.DELETE.name(), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -162,8 +231,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response putJson(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response putJson(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.PUT.name(), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -171,8 +253,21 @@ public class RequestUitl implements J {
         return null;
     }
 
-    public static Response getJson(String url, Map<String, String> headers, Map<String, Object> params){
-        try {
+    public static Response getJson(String url, Object header, Object param){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        try{
+            if(header instanceof String) {
+                headers = (Map<String, String>) in(header.toString(), true);
+            }else {
+                headers = (Map<String, String>) header;
+            }
+
+            if(param instanceof String) {
+                params = (Map<String, Object>) in(param.toString(), false);
+            }else {
+                params = (Map<String, Object>) param;
+            }
             return sendData(url, headers, params, TYPE.GET.name(), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -251,8 +346,35 @@ public class RequestUitl implements J {
         return new Response(httpURLConnection.getResponseCode(), new String(out.toByteArray(), "UTF-8"), setHeaders);
     }
 
+    public static Object in(String json, boolean flag){
+        Map<String, String> headers = null;
+        Map<String, Object> params = null;
+        if(json == null || json.length() == 0)
+            return params;
+        JSONObject in = null;
+        try{
+             in = JSONObject.parseObject(json);
+        }catch(Exception e){
+            return params;
+        }
+        if(flag){
+            headers = new HashMap<>();
+            Map<String, String> finalHeaders = headers;
+            in.entrySet().stream().forEach(x -> {
+                    finalHeaders.put(x.getKey(), x.getValue().toString());
+            });
+            return headers;
+        }
+        params = new HashMap<>();
+        Map<String, Object> finalParams = params;
+        in.entrySet().stream().forEach(x -> {
+                finalParams.put(x.getKey(), x.getValue());
+        });
+        return params;
+    }
+
+
     public static void main(String[] args) {
-        String response =  RequestUitl.postJson("https://api-test-e.suanshubang.cc/shizi-activity/api/activity/initiator/create?appId=0&cuid=lsdkf&ZYBUSS=R2Efj7FdSe7YV7lEd_nra2QQBcsGprCgdRAIXcRLhQYro8Rfz8eFPmMWGe1Et5QG", null, J.in("{\"activityId\":66,\"fromLocation\":2}")).toString();
-        System.out.println(response);
+
     }
 }
