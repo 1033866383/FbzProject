@@ -13,8 +13,9 @@ public class FThreadPool {
 
         @Override
         public void run() {
+            //maybe has some question
             while (RUNNING){
-                if(shutdown == true){
+                if(shutdown){
                     Thread.interrupted();
                 }
                 Runnable task = null;
